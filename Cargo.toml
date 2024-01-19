@@ -1,8 +1,16 @@
 [package]
 description = "Manage environment variables"
 name = "menva"
-version = "0.1.0"
+version = "1.0.0"
 license = "MIT OR Apache-2.0"
 edition = "2021"
 repository = "https://github.com/lucas-montes/menva"
 authors = ["Lucas Montes <lluc23@hotmail.com>"]
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
+

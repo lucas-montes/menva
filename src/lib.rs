@@ -4,23 +4,25 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-pub fn read_env_file() {
-    if let Ok(file) = File::open(".env") {
-        for line in BufReader::new(file).lines() {
-            if let Ok(line) = line {
-                let trimmed_line = line.trim();
-                let is_readable = !trimmed_line.is_empty() && !trimmed_line.starts_with('#');
-                if is_readable {
-                    let parts: Vec<&str> = trimmed_line.splitn(2, '=').collect();
-                    if parts.len() == 2 {
-                        let key = parts[0].trim();
-                        let value = parts[1].trim();
-                        env::set_var(key, value);
-                    }
-                }
-            }
+pub fn read_default_file() {
+    read_env_file(".env");
+}
+
+pub fn read_env_file(filename: &str) {
+    match File::open(filename) {
+        Ok(file) => BufReader::new(file).lines().flatten().for_each(handle_line),
+        Err(_) => panic!("Your {} has problems", filename),
+    };
+}
+
+fn handle_line(line: String) {
+    let trimmed_line = line.trim();
+    if !trimmed_line.is_empty() && !trimmed_line.starts_with('#') {
+        match trimmed_line.split_once('=') {
+            Some((key, value)) => env::set_var(key.trim(), value.trim()),
+            None => panic!("Your line {} if malformated", trimmed_line),
         }
-    }
+    };
 }
 
 pub fn get_env(key: &str) -> String {
@@ -28,8 +30,9 @@ pub fn get_env(key: &str) -> String {
 }
 
 pub fn get_bool_env(key: &str) -> bool {
-    env::var(key)
-        .unwrap_or(String::from("false"))
-        .parse::<bool>()
-        .unwrap_or(false)
+    get_env(key).parse::<bool>().unwrap_or(false)
+}
+
+pub fn get_int_env(key: &str) -> i64 {
+    get_env(key).parse::<i64>().unwrap_or(0)
 }
