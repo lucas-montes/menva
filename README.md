@@ -1,17 +1,20 @@
 # Menva
 
+
+
+
 Set your environment variables from your .env file
-´´´rust
+```rust
 use menva::read_env_file;
 
 fn main() {
     read_env_file(".env");
     do_cool_things();
 }
-´´´
+```
 
 Get your environment variables with their type
-´´´rust
+```rust
 use menva::{get_env, get_bool_env};
 
 pub fn do_cool_things() {
@@ -20,4 +23,4 @@ pub fn do_cool_things() {
         false => todo!(),
     }
 }
-´´´
+```
