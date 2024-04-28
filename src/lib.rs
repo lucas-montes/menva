@@ -2,16 +2,19 @@ use std::{
     env,
     fs::File,
     io::{BufRead, BufReader},
+    path::Path,
 };
 
+pub use menva_macros::FromEnv;
+
 pub fn read_default_file() {
-    read_env_file(".env");
+    read_env_file(".env")
 }
 
-pub fn read_env_file(filename: &str) {
-    match File::open(filename) {
+pub fn read_env_file(filename: impl AsRef<Path> + std::fmt::Debug) {
+    match File::open(&filename) {
         Ok(file) => BufReader::new(file).lines().flatten().for_each(handle_line),
-        Err(_) => panic!("Your {} has problems", filename),
+        Err(err) => panic!("Your {filename:?} has problems: {err}"),
     };
 }
 
@@ -20,7 +23,7 @@ fn handle_line(line: String) {
     if !trimmed_line.is_empty() && !trimmed_line.starts_with('#') {
         match trimmed_line.split_once('=') {
             Some((key, value)) => env::set_var(key.trim(), value.trim()),
-            None => panic!("Your line {} if malformated", trimmed_line),
+            None => panic!("Your line {trimmed_line} if malformated"),
         }
     };
 }
