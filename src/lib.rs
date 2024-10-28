@@ -13,7 +13,10 @@ pub fn read_default_file() {
 
 pub fn read_env_file(filename: impl AsRef<Path> + std::fmt::Debug) {
     match File::open(&filename) {
-        Ok(file) => BufReader::new(file).lines().flatten().for_each(handle_line),
+        Ok(file) => BufReader::new(file)
+            .lines()
+            .map_while(Result::ok)
+            .for_each(handle_line),
         Err(err) => panic!("Your {filename:?} has problems: {err}"),
     };
 }
