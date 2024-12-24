@@ -94,7 +94,9 @@ fn get_env_var_name(field: &syn::Field, field_name_str: String) -> String {
         .map(|attr| {
             let mut prefix = attr
                 .parse_args::<LitStr>()
-                .expect(&format!("Prefix for `{}` has a problem", field_name_str))
+                .unwrap_or_else(|_| {
+                    panic!("Prefix for `{}` has a problem", field_name_str)
+                })
                 .value();
             prefix.push_str(&field_name_str);
             prefix

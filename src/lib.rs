@@ -32,13 +32,13 @@ fn handle_line(line: String) {
 }
 
 pub fn get_env(key: &str) -> String {
-    env::var(key).unwrap_or(String::from(""))
+    env::var(key).unwrap_or_default()
 }
 
 pub fn get_bool_env(key: &str) -> bool {
-    get_env(key).parse::<bool>().unwrap_or(false)
+    get_env(key).parse::<bool>().unwrap_or_default()
 }
 
 pub fn get_int_env(key: &str) -> i64 {
-    get_env(key).parse::<i64>().unwrap_or(0)
+    get_env(key).parse::<i64>().unwrap_or_default()
 }

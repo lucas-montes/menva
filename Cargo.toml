@@ -2,10 +2,17 @@
 description = "Manage environment variables"
 name = "menva"
 version = "1.1.0"
-license = "MIT OR Apache-2.0"
-edition = "2021"
 repository = "https://github.com/lucas-montes/menva"
 authors = ["Lucas Montes <lluc23@hotmail.com>"]
+license.workspace = true
+edition.workspace = true
+
+[workspace.package]
+edition = "2021"
+license = "Apache-2.0"
+
+[workspace]
+members = ["menva-macros"]
 
 [dependencies]
 menva-macros = { path = "./menva-macros", version = "0.1.0" }

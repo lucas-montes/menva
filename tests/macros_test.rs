@@ -1,7 +1,7 @@
 use std::net::Ipv4Addr;
 use std::str::FromStr;
 
-use menva_macros::FromEnv;
+use menva::FromEnv;
 
 #[test]
 fn test_from_env_with_prefix() {

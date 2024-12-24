@@ -1,7 +1,9 @@
 [package]
 name = "menva-macros"
 version = "0.1.0"
-edition = "2021"
+description = "Macros for menva"
+license.workspace = true
+edition.workspace = true
 
 [lib]
 proc-macro = true
