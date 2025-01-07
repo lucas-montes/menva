@@ -7,18 +7,23 @@ use std::{
 
 pub use menva_macros::FromEnv;
 
+pub fn try_read_default_file() -> Result<()> {
+    read_env_file(".env")
+}
+
 pub fn read_default_file() {
     read_env_file(".env")
 }
 
-pub fn read_env_file(filename: impl AsRef<Path> + std::fmt::Debug) {
-    match File::open(&filename) {
-        Ok(file) => BufReader::new(file)
-            .lines()
-            .map_while(Result::ok)
-            .for_each(handle_line),
-        Err(err) => panic!("Your {filename:?} has problems: {err}"),
-    };
+pub fn read_env_file(
+    filename: impl AsRef<Path> + std::fmt::Debug,
+) -> Result<(), std::io::Error> {
+    let file = File::open(&filename)?;
+    BufReader::new(file)
+        .lines()
+        .map_while(Result::ok)
+        .for_each(handle_line);
+    Ok(())
 }
 
 fn handle_line(line: String) {
